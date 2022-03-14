@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel : ProductsViewModel by inject()
     private val binding : ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
+    // Contrato
     private val getContent = registerForActivityResult(AddProductActivity.ActivityContract()) {
         product ->
             product?.let {

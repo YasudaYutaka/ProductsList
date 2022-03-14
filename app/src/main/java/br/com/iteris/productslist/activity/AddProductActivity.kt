@@ -3,21 +3,16 @@ package br.com.iteris.productslist.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.os.bundleOf
-import br.com.iteris.productslist.R
 import br.com.iteris.productslist.databinding.ActivityAddProductBinding
 import br.com.iteris.productslist.model.Product
-import br.com.iteris.productslist.viewmodel.ProductsViewModel
-import org.koin.android.ext.android.inject
 
 class AddProductActivity : AppCompatActivity() {
 
-    private val viewModel : ProductsViewModel by inject()
     private val binding : ActivityAddProductBinding by lazy { ActivityAddProductBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +40,7 @@ class AddProductActivity : AppCompatActivity() {
     }
 
 
+    // Contrato da activity
     class ActivityContract : ActivityResultContract<String, Product>() {
         override fun createIntent(context: Context, input: String) =
             Intent(context, AddProductActivity::class.java)
