@@ -10,6 +10,8 @@ import br.com.iteris.productslist.R
 import br.com.iteris.productslist.model.Product
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
 import coil.load
+import java.text.NumberFormat
+import java.util.*
 
 class ProductListAdapter(private val viewModel : ProductsViewModel) : RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
 
@@ -33,10 +35,18 @@ class ProductListAdapter(private val viewModel : ProductsViewModel) : RecyclerVi
         private val ivProduct : ImageView by lazy { itemView.findViewById(R.id.product_item_ivProduct) }
 
         fun bind(product : Product) {
+
+            // Verifica se deve ter imagem ou não e seta visibilidade
+            ivProduct.visibility = if(product.image == null)View.GONE
+                                        else View.VISIBLE
+            ivProduct.load(product.image)
+
             tvProductTitle.text = product.name
             tvProductCategory.text = product.category
-            tvPrice.text = product.price.toString()
-            ivProduct.load(product.image)
+
+            // Formata para padrão BRL
+            val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            tvPrice.text = formatter.format(product.price)
         }
     }
 
