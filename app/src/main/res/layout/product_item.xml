@@ -42,7 +42,7 @@
             tools:text="Maça" />
 
         <TextView
-            android:id="@+id/product_item_tvProductCategory"
+            android:id="@+id/product_item_tvProductDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -62,7 +62,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/product_item_tvProductCategory"
+            app:layout_constraintTop_toBottomOf="@id/product_item_tvProductDescription"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/product_item_tvProductTitle"
             app:layout_constraintEnd_toEndOf="@id/product_item_tvProductTitle"

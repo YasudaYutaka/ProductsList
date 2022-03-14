@@ -30,7 +30,7 @@ class ProductListAdapter(private val viewModel : ProductsViewModel) : RecyclerVi
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
 
         private val tvProductTitle : TextView by lazy { itemView.findViewById(R.id.product_item_tvProductTitle) }
-        private val tvProductCategory : TextView by lazy { itemView.findViewById(R.id.product_item_tvProductCategory) }
+        private val tvProductDescription : TextView by lazy { itemView.findViewById(R.id.product_item_tvProductDescription) }
         private val tvPrice : TextView by lazy { itemView.findViewById(R.id.product_item_tvPrice) }
         private val ivProduct : ImageView by lazy { itemView.findViewById(R.id.product_item_ivProduct) }
 
@@ -42,7 +42,7 @@ class ProductListAdapter(private val viewModel : ProductsViewModel) : RecyclerVi
             ivProduct.load(product.image)
 
             tvProductTitle.text = product.name
-            tvProductCategory.text = product.category
+            tvProductDescription.text = product.description
 
             // Formata para padrão BRL
             val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
