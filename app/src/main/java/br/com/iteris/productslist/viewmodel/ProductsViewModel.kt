@@ -21,4 +21,12 @@ class ProductsViewModel(private val repository : ProductsRepository) : ViewModel
         mutableProductsList.postValue(repository.getProductList())
     }
 
+    // Pega antiga lista e adiciona novo produto a ela
+    fun updateProduct(product : Product) : Int {
+        val newList = mutableProductsList.value
+        newList?.add(product)
+        mutableProductsList.postValue(newList)
+        return newList!!.size
+    }
+
 }
