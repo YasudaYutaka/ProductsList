@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
 import br.com.iteris.productslist.R
 import br.com.iteris.productslist.model.Product
@@ -13,7 +14,10 @@ import java.text.NumberFormat
 import java.util.*
 import br.com.iteris.productslist.extensions.loadImage
 
-class ProductListAdapter(private val viewModel : ProductsViewModel) : RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
+class ProductListAdapter(
+    private val viewModel: ProductsViewModel,
+    private val getProductDetailsContent: ActivityResultLauncher<Product>
+) : RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -47,6 +51,10 @@ class ProductListAdapter(private val viewModel : ProductsViewModel) : RecyclerVi
             // Formata para padrão BRL
             val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
             tvPrice.text = formatter.format(product.price)
+
+            itemView.setOnClickListener {
+                getProductDetailsContent.launch(product)
+            }
         }
     }
 

@@ -1,11 +1,11 @@
 package br.com.iteris.productslist
 
 import android.view.View
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.iteris.productslist.activity.AddProductActivity
+import br.com.iteris.productslist.activity.ProductDetailsActivity
 import br.com.iteris.productslist.adapter.ProductListAdapter
 import br.com.iteris.productslist.databinding.ActivityMainBinding
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
@@ -25,7 +25,15 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    private val adapter : ProductListAdapter by lazy { ProductListAdapter(viewModel) }
+    // Contrato para detalhes do produto
+    private val getProductDetailsContent = registerForActivityResult(ProductDetailsActivity.ActivityContract()) {
+        product ->
+            product?.let {
+
+            }
+    }
+
+    private val adapter : ProductListAdapter by lazy { ProductListAdapter(viewModel, getProductDetailsContent) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
