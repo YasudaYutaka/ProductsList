@@ -95,6 +95,7 @@ class AddProductActivity : AppCompatActivity() {
 
     // Listener para abrir dialog de cadastrar imagem
     private val ivLoadImageListener = View.OnClickListener {
+        // Abre o dialog com um lambda quando da certo
         AddImageDialog(this).showDialog(url) { image ->
             url = image
             binding.addProductIvProduct.loadImage(image)
