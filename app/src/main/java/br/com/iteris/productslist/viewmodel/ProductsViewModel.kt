@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import br.com.iteris.productslist.model.Product
-import br.com.iteris.productslist.model.repository.ProductsRepository
 
-class ProductsViewModel(private val repository : ProductsRepository) : ViewModel() {
+class ProductsViewModel : ViewModel() {
 
     private val mutableProductsList = MutableLiveData<MutableList<Product>>()
     val productsList : LiveData<MutableList<Product>> get() = mutableProductsList
@@ -15,10 +14,6 @@ class ProductsViewModel(private val repository : ProductsRepository) : ViewModel
 
     fun getProductByPosition(position : Int) : Product {
         return productsList.value!![position]
-    }
-
-    fun getProductsList() {
-        mutableProductsList.postValue(repository.getProductList())
     }
 
     // Atualiza lista com novos produtos

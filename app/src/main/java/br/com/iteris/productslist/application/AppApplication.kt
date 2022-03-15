@@ -16,7 +16,7 @@ class AppApplication : Application() {
 
         val myModules = module {
             factory { ProductsRepository() }
-            viewModel { ProductsViewModel(get()) }
+            viewModel { ProductsViewModel() }
             viewModel { AddProductViewModel() }
         }
 

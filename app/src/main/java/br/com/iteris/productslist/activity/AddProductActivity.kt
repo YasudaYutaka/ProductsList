@@ -1,29 +1,23 @@
 package br.com.iteris.productslist.activity
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import br.com.iteris.productslist.R
 import br.com.iteris.productslist.databinding.ActivityAddProductBinding
-import br.com.iteris.productslist.databinding.DialogRegisterImageBinding
 import br.com.iteris.productslist.dialog.AddImageDialog
 import br.com.iteris.productslist.extensions.loadImage
 import br.com.iteris.productslist.model.Product
 import br.com.iteris.productslist.viewmodel.AddProductViewModel
-import coil.load
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.android.ext.android.inject
-import java.util.zip.Inflater
 
 class AddProductActivity : AppCompatActivity() {
 
