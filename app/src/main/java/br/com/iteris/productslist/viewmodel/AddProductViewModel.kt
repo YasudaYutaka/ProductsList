@@ -45,7 +45,7 @@ class AddProductViewModel : ViewModel() {
         } else tilPrice.error = ""
 
         if(isValid) {
-            val product = Product(name.text.toString(), description.text.toString(), price.text.toString().toDouble(), image)
+            val product = Product(0L, name.text.toString(), description.text.toString(), price.text.toString().toDouble(), image)
             mutableIsValid.postValue(product)
         }
     }
