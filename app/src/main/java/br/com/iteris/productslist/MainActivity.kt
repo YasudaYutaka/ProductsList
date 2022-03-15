@@ -9,6 +9,7 @@ import br.com.iteris.productslist.activity.AddProductActivity
 import br.com.iteris.productslist.activity.ProductDetailsActivity
 import br.com.iteris.productslist.adapter.ProductListAdapter
 import br.com.iteris.productslist.database.AppDatabase
+import br.com.iteris.productslist.database.dao.ProductDao
 import br.com.iteris.productslist.databinding.ActivityMainBinding
 import br.com.iteris.productslist.model.Product
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
@@ -20,13 +21,17 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel : ProductsViewModel by inject()
     private val binding : ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private var productDao : ProductDao? = null
 
     // Contrato
     private val getContent = registerForActivityResult(AddProductActivity.ActivityContract()) {
         product ->
             product?.let {
-                val position = viewModel.addProductToList(product)
-                adapter.notifyItemInserted(position)
+                GlobalScope.launch {
+                    productDao?.saveProduct(it) // salva no database
+                    val position = viewModel.addProductToList(product)
+                    adapter.notifyItemInserted(position)
+                }
             }
     }
 
@@ -46,13 +51,9 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch {
             // Database
-            val db = Room.databaseBuilder(
-                this@MainActivity,
-                AppDatabase::class.java,
-                "productslist.db"
-            ).build()
-            val productDao = db.productDao()
-            viewModel.updateProductsList(productDao.searchAll())
+            val db = AppDatabase.instanceDatabase(this@MainActivity)
+            productDao = db.productDao()
+            viewModel.updateProductsList(productDao!!.searchAll())
         }
 
 
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             println("asdasdasdas"+ viewModel.productsList.value)
         })
 
-        viewModel.getProductsList()
+        //viewModel.getProductsList()
     }
 
     // Floating Action Button Listener -> Envia para tela de cadastro de produtos
