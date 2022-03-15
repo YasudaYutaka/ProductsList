@@ -27,7 +27,8 @@ class AddProductViewModel : ViewModel() {
         description: EditText,
         tilDescription: TextInputLayout,
         price: EditText,
-        tilPrice: TextInputLayout
+        tilPrice: TextInputLayout,
+        image : String? = null
     ) {
         var isValid = true
         if(name.text.isEmpty() || name.text.isBlank()) {
@@ -44,7 +45,7 @@ class AddProductViewModel : ViewModel() {
         } else tilPrice.error = ""
 
         if(isValid) {
-            val product = Product(name.text.toString(), description.text.toString(), price.text.toString().toDouble())
+            val product = Product(name.text.toString(), description.text.toString(), price.text.toString().toDouble(), image)
             mutableIsValid.postValue(product)
         }
     }

@@ -21,17 +21,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/add_product_btnLoadImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/carregar"
-            app:icon="@drawable/ic_baseline_refresh"
-            app:layout_constraintTop_toBottomOf="@id/add_product_ivProduct"
-            app:layout_constraintBottom_toBottomOf="@id/add_product_ivProduct"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/add_product_tilProductName"
             android:layout_width="0dp"
@@ -40,7 +29,7 @@
             android:layout_marginHorizontal="16dp"
             android:hint="@string/nome"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@id/add_product_btnLoadImage"
+            app:layout_constraintTop_toBottomOf="@id/add_product_ivProduct"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" >
 

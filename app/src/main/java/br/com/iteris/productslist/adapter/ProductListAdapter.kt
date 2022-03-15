@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.iteris.productslist.R
 import br.com.iteris.productslist.model.Product
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
-import coil.load
 import java.text.NumberFormat
 import java.util.*
+import br.com.iteris.productslist.extensions.loadImage
 
 class ProductListAdapter(private val viewModel : ProductsViewModel) : RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
 
@@ -39,7 +39,7 @@ class ProductListAdapter(private val viewModel : ProductsViewModel) : RecyclerVi
             // Verifica se deve ter imagem ou não e seta visibilidade
             ivProduct.visibility = if(product.image == null)View.GONE
                                         else View.VISIBLE
-            ivProduct.load(product.image)
+            ivProduct.loadImage(product.image)
 
             tvProductTitle.text = product.name
             tvProductDescription.text = product.description
