@@ -4,11 +4,16 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.room.Room
 import br.com.iteris.productslist.activity.AddProductActivity
 import br.com.iteris.productslist.activity.ProductDetailsActivity
 import br.com.iteris.productslist.adapter.ProductListAdapter
+import br.com.iteris.productslist.database.AppDatabase
 import br.com.iteris.productslist.databinding.ActivityMainBinding
+import br.com.iteris.productslist.model.Product
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val getContent = registerForActivityResult(AddProductActivity.ActivityContract()) {
         product ->
             product?.let {
-                val position = viewModel.updateProduct(product)
+                val position = viewModel.addProductToList(product)
                 adapter.notifyItemInserted(position)
             }
     }
@@ -39,6 +44,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        GlobalScope.launch {
+            // Database
+            val db = Room.databaseBuilder(
+                this@MainActivity,
+                AppDatabase::class.java,
+                "productslist.db"
+            ).build()
+            val productDao = db.productDao()
+            viewModel.updateProductsList(productDao.searchAll())
+        }
+
+
         with(binding) {
             // Inicializa o recycler view
             productListRecyclerView.adapter = adapter
@@ -55,11 +72,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.getProductsList()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        println(viewModel.productsList.value)
     }
 
     // Floating Action Button Listener -> Envia para tela de cadastro de produtos
