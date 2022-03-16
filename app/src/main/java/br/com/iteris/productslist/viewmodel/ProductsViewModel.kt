@@ -34,7 +34,9 @@ class ProductsViewModel : ViewModel() {
         val position = productsList.value?.indexOfFirst { it.id == product.id }
 
         val newList = mutableProductsList.value
-        newList?.remove(product)
+        position?.let {
+            newList?.removeAt(position)
+        }
         mutableProductsList.postValue(newList)
 
         return position!!
