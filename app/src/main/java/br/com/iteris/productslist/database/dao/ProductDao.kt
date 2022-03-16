@@ -1,9 +1,6 @@
 package br.com.iteris.productslist.database.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import br.com.iteris.productslist.model.Product
 
 @Dao
@@ -17,5 +14,8 @@ interface ProductDao {
 
     @Delete
     fun deleteProduct(vararg product : Product)
+
+    @Update
+    fun updateProduct(vararg product: Product)
 
 }

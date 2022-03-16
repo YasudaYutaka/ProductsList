@@ -11,8 +11,10 @@ import br.com.iteris.productslist.database.AppDatabase
 import br.com.iteris.productslist.database.dao.ProductDao
 import br.com.iteris.productslist.databinding.ActivityMainBinding
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -28,17 +30,28 @@ class MainActivity : AppCompatActivity() {
                 GlobalScope.launch {
                     productDao?.saveProduct(it) // salva no database
                     val position = viewModel.addProductToList(product)
-                    adapter.notifyItemInserted(position)
+                    withContext(Dispatchers.Main) {
+                        adapter.notifyItemInserted(position)
+                    }
                 }
             }
     }
 
     // Contrato para detalhes do produto
     private val getProductDetailsContent = registerForActivityResult(ProductDetailsActivity.ActivityContract()) {
-        product ->
-            product?.let {
-                val position = viewModel.removeProductFromList(it)
-                adapter.notifyItemRemoved(position)
+        pair ->
+            pair?.let {
+                when(it.second) {
+                    "remove" -> {
+                        val position = viewModel.removeProductFromList(it.first)
+                        adapter.notifyItemRemoved(position)
+                    }
+                    "edit" -> {
+                        println(it.first)
+                        val position = viewModel.updateProductInformation(it.first)
+                        adapter.notifyItemChanged(position)
+                    }
+                }
             }
     }
 

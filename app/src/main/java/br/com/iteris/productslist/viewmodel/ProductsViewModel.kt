@@ -31,13 +31,20 @@ class ProductsViewModel : ViewModel() {
 
     // Remove um produto da lista
     fun removeProductFromList(product: Product) : Int {
-        val position = productsList.value?.indexOf(product)
+        val position = productsList.value?.indexOfFirst { it.id == product.id }
 
         val newList = mutableProductsList.value
         newList?.remove(product)
         mutableProductsList.postValue(newList)
 
         return position!!
+    }
+
+    // Atualiza um produto
+    fun updateProductInformation(product: Product) : Int {
+        val position = productsList.value!!.indexOfFirst { it.id == product.id }
+        mutableProductsList.value!![position] = product
+        return position
     }
 
 }

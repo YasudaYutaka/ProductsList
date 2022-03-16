@@ -19,11 +19,11 @@ import br.com.iteris.productslist.viewmodel.AddProductViewModel
 import com.google.android.material.textfield.TextInputLayout
 import org.koin.android.ext.android.inject
 
-class AddProductActivity : AppCompatActivity() {
+open class AddProductActivity : AppCompatActivity() {
 
-    private val viewModel : AddProductViewModel by inject()
-    private val binding : ActivityAddProductBinding by lazy { ActivityAddProductBinding.inflate(layoutInflater) }
-    private var url : String? = null
+    protected val viewModel : AddProductViewModel by inject()
+    protected val binding : ActivityAddProductBinding by lazy { ActivityAddProductBinding.inflate(layoutInflater) }
+    protected var url : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,7 @@ class AddProductActivity : AppCompatActivity() {
     }
 
     // Listener do botão de salvar o produto
-    private val btnSaveProductListener = View.OnClickListener {
+    protected open val btnSaveProductListener = View.OnClickListener {
         with(binding) {
             addProductBtnSaveProduct.isClickable = false
             // Valida os inputs

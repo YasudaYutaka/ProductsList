@@ -28,7 +28,8 @@ class AddProductViewModel : ViewModel() {
         tilDescription: TextInputLayout,
         price: EditText,
         tilPrice: TextInputLayout,
-        image : String? = null
+        image : String? = null,
+        idProduct : Long = 0L
     ) {
         var isValid = true
         if(name.text.isEmpty() || name.text.isBlank()) {
@@ -46,6 +47,7 @@ class AddProductViewModel : ViewModel() {
 
         if(isValid) {
             val product = Product(
+                id = idProduct, // precisa disso por conta que estou utilizando no editProduct tmb
                 name = name.text.toString(),
                 description = description.text.toString(),
                 price = price.text.toString().toDouble(),
