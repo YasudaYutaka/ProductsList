@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.os.bundleOf
 import br.com.iteris.productslist.R
@@ -32,6 +33,11 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_product_details, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     // Contrato da Activity

@@ -10,4 +10,5 @@
     <string name="image">Image</string>
     <string name="url">URL</string>
     <string name="product_images">product images</string>
+    <string name="editar">Editar</string>
 </resources>
