@@ -16,6 +16,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.inject
+import org.koin.ext.scope
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +29,10 @@ class MainActivity : AppCompatActivity() {
         product ->
             product?.let {
                 GlobalScope.launch {
-                    productDao?.saveProduct(it) // salva no database
+                    // Salva produto e coloca o novo ID no produto (caso contrario iria como 0 para a lista, ai n dava para remover direto,só se reiniciasse o app)
+                    productDao?.saveProduct(it).apply {
+                        product.id = this!!
+                    }
                     val position = viewModel.addProductToList(product)
                     withContext(Dispatchers.Main) {
                         adapter.notifyItemInserted(position)

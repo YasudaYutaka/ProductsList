@@ -10,7 +10,7 @@ interface ProductDao {
     fun searchAll() : MutableList<Product>
 
     @Insert
-    fun saveProduct(vararg product : Product) // n precisa varargs
+    fun saveProduct(product : Product) : Long
 
     @Delete
     fun deleteProduct(vararg product : Product)

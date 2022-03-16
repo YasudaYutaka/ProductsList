@@ -31,7 +31,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private val product : Product by lazy { intent.extras!!.getSerializable(DETAILS) as Product }
     private val viewModel : ProductDetailsViewModel by inject()
     private val db: AppDatabase by lazy { AppDatabase.instanceDatabase(this) }
-    private var productDao : ProductDao? = null
+    private val productDao : ProductDao by lazy { db.productDao() }
 
     private val getContent = registerForActivityResult(EditProductActivity.ActivityContract()) {
         newProduct ->
@@ -43,7 +43,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                     image = it.image
                 }
                 GlobalScope.launch {
-                    productDao?.updateProduct(newProduct)
+                    productDao.updateProduct(newProduct)
                     val intent = Intent().apply { // seta a resposta
                         putExtras(bundleOf(PAIRPRODUCT to Pair(product, "edit")))
                     }
@@ -59,8 +59,6 @@ class ProductDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        productDao = db.productDao()
 
         menuStateObserver() // Observers do menu
     }
@@ -99,7 +97,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         // Observer de remoção do produto
         viewModel.removeState.observe(this, {
             GlobalScope.launch {
-                productDao?.deleteProduct(product)
+                productDao.deleteProduct(product)
                 val intent = Intent().apply {
                     putExtras(bundleOf(PAIRPRODUCT to Pair(product, "remove")))
                 }

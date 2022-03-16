@@ -6,7 +6,7 @@ import java.io.Serializable
 
 @Entity
 data class Product(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0L, //precisa ser 0 para o Room entender q deve gerar um id
+    @PrimaryKey(autoGenerate = true) var id: Long = 0L, //precisa ser 0 para o Room entender q deve gerar um id
     var name : String,
     var description : String,
     var price : Double,
