@@ -13,22 +13,22 @@ class AddImageDialog(private val context: Context) {
 
             // Caso já tenha uma url
             url?.let {
-                registerImageIvProduct.loadImage(it)
-                registerImageEtUrl.setText(it)
+                //registerImageIvProduct.loadImage(it)
+                //registerImageEtUrl.setText(it)
             }
 
             // Ao clicar carregar imagem
             registerImageBtnLoadImage.setOnClickListener {
-                val url1 = registerImageEtUrl.text.toString()
-                registerImageIvProduct.loadImage(url1)
+               // val url1 = registerImageEtUrl.text.toString()
+               // registerImageIvProduct.loadImage(url1)
             }
 
             // Gera dialog
             AlertDialog.Builder(context)
                 .setView(root)
                 .setPositiveButton("Confirmar") { _, _ ->
-                    val url1 = registerImageEtUrl.text.toString()
-                    onLoadingImage(url1) // lambda
+                   // val url1 = registerImageEtUrl.text.toString()
+                    //onLoadingImage(url1) // lambda
                 }
                 .setNegativeButton("Cancelar") { _, _ ->}
                 .show()

@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.os.bundleOf
+import br.com.iteris.productslist.Converter
 import br.com.iteris.productslist.R
 import br.com.iteris.productslist.database.AppDatabase
 import br.com.iteris.productslist.database.dao.ProductDao
@@ -67,7 +68,9 @@ class ProductDetailsActivity : AppCompatActivity() {
         super.onResume()
 
         with(binding) {
-            productDetailIvProduct.loadImage(product.image)
+            productDetailIvProduct.loadImage(product.image?.let {
+                Converter.fromByteArrayToBitMap(it)
+            })
             val formatter = NumberFormat.getCurrencyInstance(Locale("pt", "br"))
             productDetailChipPrice.text = formatter.format(product.price)
             productDetailTvName.text = product.name

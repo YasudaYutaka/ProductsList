@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.os.bundleOf
+import br.com.iteris.productslist.Converter
 import br.com.iteris.productslist.extensions.loadImage
 import br.com.iteris.productslist.model.Product
 
@@ -18,12 +19,12 @@ class EditProductActivity : AddProductActivity() {
         super.onCreate(savedInstanceState)
         title = "Editar produto"
 
-        url = product.image
+        // TODO url = product.image
         with(binding) {
             addProductEtProductName.setText(product.name)
             addProductEtProductDescription.setText(product.description)
             addProductEtProductPrice.setText(product.price.toString())
-            addProductIvProduct.loadImage(product.image)
+            addProductIvProduct.loadImage(product.image?.let { Converter.fromByteArrayToBitMap(it) })
         }
 
     }
@@ -39,9 +40,15 @@ class EditProductActivity : AddProductActivity() {
                 addProductTilProductDescription,
                 addProductEtProductPrice,
                 addProductTilProductPrice,
-                url,
+                byteArray,
                 product.id
             )
+        }
+    }
+
+    override fun loadImageIfNotNull() {
+        product.image?.let {
+            bindingDialogRegisterImage.registerImageIvProduct.setImageBitmap(Converter.fromByteArrayToBitMap(it))
         }
     }
 
