@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import br.com.iteris.productslist.Converter
 import br.com.iteris.productslist.R
 import br.com.iteris.productslist.databinding.ActivityAddProductBinding
 import br.com.iteris.productslist.databinding.DialogRegisterImageBinding
@@ -41,10 +42,17 @@ open class AddProductActivity : AppCompatActivity() {
             it?.let {
                 uri = it
                 bindingDialogRegisterImage.registerImageIvProduct.setImageURI(it)
-                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, it)
                 byteArray = fromUriToByteArray(it)
         }
+    }
 
+    // Abrir Câmera - Contrato
+    private val takeImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if(it.resultCode == RESULT_OK) {
+            val imageBitmap = it.data?.extras?.get("data") as Bitmap
+            bindingDialogRegisterImage.registerImageIvProduct.setImageBitmap(imageBitmap)
+            byteArray = Converter.fromBitmapToByteArray(imageBitmap)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,7 +119,7 @@ open class AddProductActivity : AppCompatActivity() {
 
     // Listener para abrir dialog de cadastrar imagem
     private val ivLoadImageListener = View.OnClickListener {
-        val dialog = AlertDialog.Builder(this).apply {
+        AlertDialog.Builder(this).apply {
             setCancelable(true)
             setView(bindingDialogRegisterImage.root)
 
@@ -123,7 +131,9 @@ open class AddProductActivity : AppCompatActivity() {
             }
 
             setPositiveButton("Confirmar") { _, _ ->
-                binding.addProductIvProduct.setImageURI(uri)
+                binding.addProductIvProduct.setImageBitmap(byteArray?.let { it1 ->
+                    Converter.fromByteArrayToBitMap(it1)
+                })
             }
 
             setNegativeButton("Cancelar") {_,_->}
@@ -153,11 +163,11 @@ open class AddProductActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 // abre camera e fecha o dialog
-//                R.id.radio_camera -> {
-//                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//                    takeImage.launch(takePicture)
-//                    dialog.dismiss()
-//                }
+                R.id.radio_camera -> {
+                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    takeImage.launch(takePicture)
+                    dialog.dismiss()
+                }
             }
         }
 
