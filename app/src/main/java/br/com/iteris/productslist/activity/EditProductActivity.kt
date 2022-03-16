@@ -18,6 +18,7 @@ class EditProductActivity : AddProductActivity() {
         super.onCreate(savedInstanceState)
         title = "Editar produto"
 
+        url = product.image
         with(binding) {
             addProductEtProductName.setText(product.name)
             addProductEtProductDescription.setText(product.description)
