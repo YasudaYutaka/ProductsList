@@ -37,7 +37,8 @@ class MainActivity : AppCompatActivity() {
     private val getProductDetailsContent = registerForActivityResult(ProductDetailsActivity.ActivityContract()) {
         product ->
             product?.let {
-
+                val position = viewModel.removeProductFromList(it)
+                adapter.notifyItemRemoved(position)
             }
     }
 

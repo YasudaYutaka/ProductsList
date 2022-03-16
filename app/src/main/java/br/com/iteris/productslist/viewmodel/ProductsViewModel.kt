@@ -29,4 +29,15 @@ class ProductsViewModel : ViewModel() {
         return newList!!.size
     }
 
+    // Remove um produto da lista
+    fun removeProductFromList(product: Product) : Int {
+        val position = productsList.value?.indexOf(product)
+
+        val newList = mutableProductsList.value
+        newList?.remove(product)
+        mutableProductsList.postValue(newList)
+
+        return position!!
+    }
+
 }
