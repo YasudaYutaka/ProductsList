@@ -12,4 +12,8 @@
     <string name="product_images">product images</string>
     <string name="editar">Editar</string>
     <string name="remover">Remover</string>
+    <string name="escolha_uma_op_o">Escolha uma opção</string>
+    <string name="galeria">Galeria</string>
+    <string name="c_mera">Câmera</string>
+    <string name="upload">Upload</string>
 </resources>

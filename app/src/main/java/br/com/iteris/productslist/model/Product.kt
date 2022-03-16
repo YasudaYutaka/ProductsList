@@ -10,5 +10,5 @@ data class Product(
     var name : String,
     var description : String,
     var price : Double,
-    var image : String? =  null
+    var image : ByteArray? =  null
 ) : Serializable

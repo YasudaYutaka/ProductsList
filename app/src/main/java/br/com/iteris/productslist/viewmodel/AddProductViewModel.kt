@@ -28,7 +28,7 @@ class AddProductViewModel : ViewModel() {
         tilDescription: TextInputLayout,
         price: EditText,
         tilPrice: TextInputLayout,
-        image : String? = null,
+        image : ByteArray? = null,
         idProduct : Long = 0L
     ) {
         var isValid = true

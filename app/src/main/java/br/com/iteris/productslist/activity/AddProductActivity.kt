@@ -1,19 +1,27 @@
 package br.com.iteris.productslist.activity
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.Window
 import android.widget.EditText
+import android.widget.RadioGroup
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import br.com.iteris.productslist.R
 import br.com.iteris.productslist.databinding.ActivityAddProductBinding
-import br.com.iteris.productslist.dialog.AddImageDialog
-import br.com.iteris.productslist.extensions.loadImage
+import br.com.iteris.productslist.databinding.DialogRegisterImageBinding
 import br.com.iteris.productslist.model.Product
 import br.com.iteris.productslist.viewmodel.AddProductViewModel
 import com.google.android.material.textfield.TextInputLayout
@@ -23,7 +31,21 @@ open class AddProductActivity : AppCompatActivity() {
 
     protected val viewModel : AddProductViewModel by inject()
     protected val binding : ActivityAddProductBinding by lazy { ActivityAddProductBinding.inflate(layoutInflater) }
-    protected var url : String? = null
+    protected val bindingDialogRegisterImage : DialogRegisterImageBinding by lazy { DialogRegisterImageBinding.inflate(layoutInflater) }
+    protected var uri : Uri? = null
+    protected var byteArray : ByteArray? = null
+
+    // Abrir galeria Contrato
+    private val getImage = registerForActivityResult(
+        ActivityResultContracts.GetContent()) {
+            it?.let {
+                uri = it
+                bindingDialogRegisterImage.registerImageIvProduct.setImageURI(it)
+                val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, it)
+                byteArray = fromUriToByteArray(it)
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +82,7 @@ open class AddProductActivity : AppCompatActivity() {
                 addProductTilProductDescription,
                 addProductEtProductPrice,
                 addProductTilProductPrice,
-                url
+                byteArray
             )
         }
     }
@@ -89,11 +111,66 @@ open class AddProductActivity : AppCompatActivity() {
 
     // Listener para abrir dialog de cadastrar imagem
     private val ivLoadImageListener = View.OnClickListener {
-        // Abre o dialog com um lambda quando da certo
-        AddImageDialog(this).showDialog(url) { image ->
-            url = image
-            binding.addProductIvProduct.loadImage(image)
+        val dialog = AlertDialog.Builder(this).apply {
+            setCancelable(true)
+            setView(bindingDialogRegisterImage.root)
+
+            // Caso já tenha uma imagem
+            loadImageIfNotNull()
+
+            bindingDialogRegisterImage.registerImageBtnLoadImage.setOnClickListener {
+                showImagePickerDialog()
+            }
+
+            setPositiveButton("Confirmar") { _, _ ->
+                binding.addProductIvProduct.setImageURI(uri)
+            }
+
+            setNegativeButton("Cancelar") {_,_->}
+
+        }.show()
+    }
+
+    // Mostra Dialog da Image Picker
+    private fun showImagePickerDialog() {
+
+        // Setando o dialog customizado criado para seleção de camera ou galeria
+        val dialog = Dialog(this).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)  // Já tem um título no layout, entao tirei ele
+            setCancelable(true) // Assim consegue clicar para fora e fechar o dialog
+            setContentView(R.layout.dialog_image_picker) // seta o layout customizado para o dialog
         }
+
+        // Pegando radioGroup do image_picker_dialog layout
+        val radioGroupCameraGallery : RadioGroup = dialog.findViewById(R.id.radioGroupCameraGallery)
+
+        // Click listener do radio group
+        radioGroupCameraGallery.setOnCheckedChangeListener { _, i ->
+            when(i) {
+                // Abre galeria e fecha o dialog
+                R.id.radio_gallery -> {
+                    getImage.launch("image/")
+                    dialog.dismiss()
+                }
+                // abre camera e fecha o dialog
+//                R.id.radio_camera -> {
+//                    val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//                    takeImage.launch(takePicture)
+//                    dialog.dismiss()
+//                }
+            }
+        }
+
+        dialog.show()
+    }
+
+    // Converte URI to ByteArray
+    private fun fromUriToByteArray(uri : Uri) : ByteArray {
+        return contentResolver.openInputStream(uri)!!.buffered().use { it.readBytes() }
+    }
+
+    // Método para editProductActivity usar para colocar imagem
+    open fun loadImageIfNotNull() {
     }
 
     // Contrato da activity

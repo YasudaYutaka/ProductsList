@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
+import br.com.iteris.productslist.Converter
 import br.com.iteris.productslist.R
 import br.com.iteris.productslist.model.Product
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
@@ -43,7 +44,7 @@ class ProductListAdapter(
             // Verifica se deve ter imagem ou não e seta visibilidade
             ivProduct.visibility = if(product.image == null)View.GONE
                                         else View.VISIBLE
-            ivProduct.loadImage(product.image)
+            ivProduct.loadImage(product.image?.let { Converter.fromByteArrayToBitMap(it) })
 
             tvProductTitle.text = product.name
             tvProductDescription.text = product.description
