@@ -13,13 +13,19 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao() : ProductDao
 
     companion object { // Com isso, conseguimos instanciar
+
+        @Volatile private var db : AppDatabase? = null
+
         // Função que da acesso a instancia do database
         fun instanceDatabase(context: Context) : AppDatabase {
-            return Room.databaseBuilder(
+            return db ?: Room.databaseBuilder(
                 context,
                 AppDatabase::class.java,
                 "productslist.db"
             ).build()
+                .also {
+                    db = it
+                }
         }
     }
 
