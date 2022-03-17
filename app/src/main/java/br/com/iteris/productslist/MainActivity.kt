@@ -3,6 +3,7 @@ package br.com.iteris.productslist
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.iteris.productslist.activity.AddProductActivity
 import br.com.iteris.productslist.activity.ProductDetailsActivity
@@ -11,10 +12,7 @@ import br.com.iteris.productslist.database.AppDatabase
 import br.com.iteris.productslist.database.dao.ProductDao
 import br.com.iteris.productslist.databinding.ActivityMainBinding
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val getContent = registerForActivityResult(AddProductActivity.ActivityContract()) {
         product ->
             product?.let {
-                GlobalScope.launch {
+                lifecycleScope.launch {
                     // Salva produto e coloca o novo ID no produto (caso contrario iria como 0 para a lista, ai n dava para remover direto,só se reiniciasse o app)
                     productDao?.saveProduct(it).apply {
                         product.id = this!!
@@ -64,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        GlobalScope.launch {
+        lifecycleScope.launch {
             // Database
             val db = AppDatabase.instanceDatabase(this@MainActivity)
             productDao = db.productDao()
@@ -84,7 +82,6 @@ class MainActivity : AppCompatActivity() {
         // ProductsList Observer
         viewModel.productsList.observe(this, {
             adapter.notifyDataSetChanged()
-            println("asdasdasdas"+ viewModel.productsList.value)
         })
 
         //viewModel.getProductsList()
