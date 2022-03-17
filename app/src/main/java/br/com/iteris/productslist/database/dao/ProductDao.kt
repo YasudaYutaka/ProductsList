@@ -7,15 +7,15 @@ import br.com.iteris.productslist.model.Product
 interface ProductDao {
 
     @Query("SELECT * FROM Product")
-    fun searchAll() : MutableList<Product>
+    suspend fun searchAll() : MutableList<Product>
 
     @Insert
-    fun saveProduct(product : Product) : Long
+    suspend fun saveProduct(product : Product) : Long
 
     @Delete
-    fun deleteProduct(vararg product : Product)
+    suspend fun deleteProduct(vararg product : Product)
 
     @Update
-    fun updateProduct(vararg product: Product)
+    suspend fun updateProduct(vararg product: Product)
 
 }
