@@ -18,6 +18,7 @@ import org.koin.android.ext.android.inject
 class MainActivity : AppCompatActivity() {
 
     private val viewModel : ProductsViewModel by inject()
+    private val db : AppDatabase by inject()
     private val binding : ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private var productDao : ProductDao? = null
 
@@ -64,7 +65,6 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             // Database
-            val db = AppDatabase.instanceDatabase(this@MainActivity)
             productDao = db.productDao()
             viewModel.updateProductsList(productDao!!.searchAll())
         }

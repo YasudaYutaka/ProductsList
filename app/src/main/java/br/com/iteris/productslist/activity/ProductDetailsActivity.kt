@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import br.com.iteris.productslist.Converter
 import br.com.iteris.productslist.R
 import br.com.iteris.productslist.database.AppDatabase
@@ -31,7 +32,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private val binding : ActivityProductDetailsBinding by lazy { ActivityProductDetailsBinding.inflate(layoutInflater) }
     private val product : Product by lazy { intent.extras!!.getSerializable(DETAILS) as Product }
     private val viewModel : ProductDetailsViewModel by inject()
-    private val db: AppDatabase by lazy { AppDatabase.instanceDatabase(this) }
+    private val db: AppDatabase by inject()
     private val productDao : ProductDao by lazy { db.productDao() }
 
     private val getContent = registerForActivityResult(EditProductActivity.ActivityContract()) {
@@ -43,7 +44,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                     price = it.price
                     image = it.image
                 }
-                GlobalScope.launch {
+                lifecycleScope.launch {
                     productDao.updateProduct(newProduct)
                     val intent = Intent().apply { // seta a resposta
                         putExtras(bundleOf(PAIRPRODUCT to Pair(product, "edit")))

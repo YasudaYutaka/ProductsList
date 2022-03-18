@@ -12,6 +12,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun productDao() : ProductDao
 
+    // com o koin n precisa dessa parte
     companion object { // Com isso, conseguimos instanciar
 
         @Volatile private var db : AppDatabase? = null
