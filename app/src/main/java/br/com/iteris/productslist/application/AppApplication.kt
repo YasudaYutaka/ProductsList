@@ -5,6 +5,7 @@ import androidx.room.Room
 import br.com.iteris.productslist.database.AppDatabase
 import br.com.iteris.productslist.model.repository.ProductsRepository
 import br.com.iteris.productslist.viewmodel.AddProductViewModel
+import br.com.iteris.productslist.viewmodel.LoginViewModel
 import br.com.iteris.productslist.viewmodel.ProductDetailsViewModel
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
 import org.koin.android.ext.koin.androidContext
@@ -22,6 +23,7 @@ class AppApplication : Application() {
             viewModel { ProductsViewModel() }
             viewModel { AddProductViewModel() }
             viewModel { ProductDetailsViewModel() }
+            viewModel { LoginViewModel() }
             single<AppDatabase> { Room.databaseBuilder(
                 get(),
                 AppDatabase::class.java,

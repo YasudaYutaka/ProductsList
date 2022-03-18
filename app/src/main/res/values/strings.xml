@@ -16,4 +16,8 @@
     <string name="galeria">Galeria</string>
     <string name="c_mera">Câmera</string>
     <string name="upload">Upload</string>
+    <string name="usu_rio">Usuário</string>
+    <string name="senha">Senha</string>
+    <string name="entrar">ENTRAR</string>
+    <string name="cadastrar_usu_rio">CADASTRAR USUÁRIO</string>
 </resources>
