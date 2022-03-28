@@ -1,26 +1,34 @@
 package br.com.iteris.productslist
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import br.com.iteris.productslist.activity.AddProductActivity
-import br.com.iteris.productslist.activity.ProductDetailsActivity
+import br.com.iteris.productslist.activity.*
 import br.com.iteris.productslist.adapter.ProductListAdapter
 import br.com.iteris.productslist.database.AppDatabase
 import br.com.iteris.productslist.database.dao.ProductDao
+import br.com.iteris.productslist.database.dao.UserDao
 import br.com.iteris.productslist.databinding.ActivityMainBinding
+import br.com.iteris.productslist.preferences.dataStore
 import br.com.iteris.productslist.viewmodel.ProductsViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import org.koin.android.ext.android.inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : UserBaseActivity() {
 
     private val viewModel : ProductsViewModel by inject()
     private val db : AppDatabase by inject()
     private val binding : ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private var productDao : ProductDao? = null
+    private val productDao : ProductDao by lazy { db.productDao() }
 
     // Contrato
     private val getContent = registerForActivityResult(AddProductActivity.ActivityContract()) {
@@ -28,8 +36,8 @@ class MainActivity : AppCompatActivity() {
             product?.let {
                 lifecycleScope.launch {
                     // Salva produto e coloca o novo ID no produto (caso contrario iria como 0 para a lista, ai n dava para remover direto,só se reiniciasse o app)
-                    productDao?.saveProduct(it).apply {
-                        product.id = this!!
+                    productDao.saveProduct(it).apply {
+                        product.id = this
                     }
                     val position = viewModel.addProductToList(product)
                     withContext(Dispatchers.Main) {
@@ -64,9 +72,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch {
-            // Database
-            productDao = db.productDao()
-            viewModel.updateProductsList(productDao!!.searchAll())
+            launch {
+                user.filterNotNull().collect {
+                    searchUserProducts()
+                }
+            }
         }
 
 
@@ -84,7 +94,30 @@ class MainActivity : AppCompatActivity() {
             adapter.notifyDataSetChanged()
         })
 
-        //viewModel.getProductsList()
+        // Profile observer
+        viewModel.profileState.observe(this, {
+            val intent = Intent(this@MainActivity, UserProfileActivity::class.java)
+            startActivity(intent)
+        })
+
+    }
+
+    private fun searchUserProducts() {
+        lifecycleScope.launch {
+            viewModel.updateProductsList(productDao.searchAll())
+        }
+    }
+
+    // Cria menu
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_product_list, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    // Caso item menu selecionado
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        viewModel.onSelectMenuItem(item.itemId)
+        return super.onOptionsItemSelected(item)
     }
 
     // Floating Action Button Listener -> Envia para tela de cadastro de produtos

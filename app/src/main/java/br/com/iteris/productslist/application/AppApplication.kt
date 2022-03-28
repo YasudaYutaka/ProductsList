@@ -3,11 +3,9 @@ package br.com.iteris.productslist.application
 import android.app.Application
 import androidx.room.Room
 import br.com.iteris.productslist.database.AppDatabase
+import br.com.iteris.productslist.database.MIGRATION_1_2
 import br.com.iteris.productslist.model.repository.ProductsRepository
-import br.com.iteris.productslist.viewmodel.AddProductViewModel
-import br.com.iteris.productslist.viewmodel.LoginViewModel
-import br.com.iteris.productslist.viewmodel.ProductDetailsViewModel
-import br.com.iteris.productslist.viewmodel.ProductsViewModel
+import br.com.iteris.productslist.viewmodel.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -24,11 +22,12 @@ class AppApplication : Application() {
             viewModel { AddProductViewModel() }
             viewModel { ProductDetailsViewModel() }
             viewModel { LoginViewModel() }
+            viewModel { SignUpViewModel() }
             single<AppDatabase> { Room.databaseBuilder(
                 get(),
                 AppDatabase::class.java,
                 "productslist.db"
-            ).build() }
+            ).addMigrations(MIGRATION_1_2).build() }
         }
 
         startKoin {

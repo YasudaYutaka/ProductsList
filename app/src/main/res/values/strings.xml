@@ -20,4 +20,9 @@
     <string name="senha">Senha</string>
     <string name="entrar">ENTRAR</string>
     <string name="cadastrar_usu_rio">CADASTRAR USUÁRIO</string>
+    <string name="nome3">Nome</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="logout">Logout</string>
+    <string name="logout2">Logout</string>
+    <string name="perfil">Perfil</string>
 </resources>
